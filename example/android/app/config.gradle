@@ -1,0 +1,7 @@
+// 该文件为自动生成，手动更改该文件，修改的内容，会被替换。
+// 需要在android/app/build.gradle文件配置
+//    apply from: "config.gradle"
+// 使用示例：project.ext.applicationId
+project.ext {
+  applicationId = "com.example.pro"
+}

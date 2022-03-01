@@ -20,6 +20,8 @@ Usage: flutter_config_maker create
     --target-class-name    flutter配置生成类的名称，默认值:AppConfig  
     --build-platform       生成对应的平台，可选:[flutter,android,ios]]，默认值:flutter
 
+`flutter pub run flutter_config_maker create --config-dir=config --target-path=lib/config/app_config.dart --target-class-name=AppConfig --build-platform=flutter,android`
+
 ### build命令
 
     可以使用--help来查看帮助：`flutter pub run flutter_config_maker build --help`
@@ -34,6 +36,8 @@ Usage: flutter_config_maker build
     --build-platform       生成对应的平台，可选:[flutter,android,ios]，默认值:flutter  
     --env-type             生成对应的环境，如果没有指定，则使用app.yaml中env.active的值  
     --[no-]replace-file    是否需要替换文件，默认值：false
+
+`flutter pub run flutter_config_maker build --config-dir=config --target-path=lib/config/app_config.dart --target-class-name=AppConfig --build-platform=flutter,android --env-type=pro --replace-file`
 
 ## 环境变量优先级
 

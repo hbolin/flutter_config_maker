@@ -1,0 +1,19 @@
+flutter:
+  baseUrl: https://www.xxxxx_pro.com/
+  code:
+    value: 8
+    type: string
+  otherUrl: https://www.other_url_pro.com/
+
+android:
+  applicationId: com.example.pro
+
+ios:
+
+replace_files:
+  huawei_json:
+    source: assets_2/json.txt
+    target: assets/json.txt
+  logo:
+    source: assets_2/logo.txt
+    target: assets/logo.txt
