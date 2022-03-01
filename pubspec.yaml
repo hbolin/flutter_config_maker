@@ -11,6 +11,12 @@ dependencies:
   flutter:
     sdk: flutter
 
+  yaml: 3.1.0
+  collection: 1.15.0
+  tuple: 2.0.0
+  args: 2.3.0
+  io: 1.0.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

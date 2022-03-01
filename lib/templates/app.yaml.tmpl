@@ -1,0 +1,57 @@
+# 统一flutter android ios 三端配置文件
+# flutter节点配置flutter端使用的变量
+# android节点配置android端使用的变量
+# ios节点配置ios端使用的变量
+# replace_files节点，则是用来替换文件，例如华为的dev环境和prod环境使用的json文件不同
+#
+# 如果需要强制指定类型，使用的type进行指定，可选类型int/double/bool/String：
+# code:
+#    value: 1
+#    type: int
+#
+# 使用env.active进行切换环境
+# env:
+#  active: dev
+#
+# PS.切换环境之后，需要运行脚本来使得环境变量生效
+#
+# 以下是示例代码：
+#
+# 当前正在使用的环境
+# env:
+#   active: dev
+#
+# flutter配置
+# flutter:
+#   baseUrl: https://www.xxxxx.com/
+#   code:
+#     value: 1
+#     type: int
+#
+# android配置
+# android:
+#   apiKey: xxxxxxxxx
+#
+# ios配置
+# ios:
+#   apiKey: yyyyyyyyy
+#
+# 替换文件
+# replace_files:
+#   file1:
+#     source: assets_1/json.txt
+#     target: assets/json.txt
+#   file2:
+#     source: assets_1/logo.txt
+#     target: assets/logo.txt
+
+flutter:
+
+android:
+
+ios:
+
+replace_files:
+  file1:
+    source:
+    target:

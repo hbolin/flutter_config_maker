@@ -1,7 +1,3 @@
 library flutter_config_maker;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'package:flutter_config_maker/src/config_maker.dart';
