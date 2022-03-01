@@ -33,7 +33,7 @@ abstract class BuildRunnerCommand extends Command<int> {
       )
       ..addMultiOption(
         buildPlatformOption,
-        help: '''生成对应的平台，可选:$defaultBuildPlatforms''',
+        help: '''生成对应的平台，可选:[$defaultFlutterPlatform,$defaultAndroidPlatform,$defaultIOSPlatform]，默认值:$defaultFlutterPlatform''',
       );
   }
 }

@@ -17,10 +17,10 @@ const defaultFlutterConfigDefaultPath = 'lib/config/app_config.dart';
 const defaultFlutterConfigDefaultClassName = 'AppConfig';
 
 /// 默认的生成对应的平台，可选flutter,android,ios，默认只生成flutter平台
-const _defaultFlutterPlatform = 'flutter';
-const _defaultAndroidPlatform = 'android';
-const _defaultIOSPlatform = 'ios';
-const defaultBuildPlatforms = [_defaultFlutterPlatform];
+const defaultFlutterPlatform = 'flutter';
+const defaultAndroidPlatform = 'android';
+const defaultIOSPlatform = 'ios';
+const defaultBuildPlatforms = [defaultFlutterPlatform];
 
 class FlutterProject {
   FlutterProject(
@@ -84,13 +84,13 @@ class FlutterProject {
     print("生成对应的平台：$buildPlatforms");
     // 创建app配置文件所在目录
     await _createConfigDirectory();
-    if (buildPlatforms.contains(_defaultFlutterPlatform)) {
+    if (buildPlatforms.contains(defaultFlutterPlatform)) {
       await _createFlutterConfigFile();
     }
-    if (buildPlatforms.contains(_defaultAndroidPlatform)) {
+    if (buildPlatforms.contains(defaultAndroidPlatform)) {
       await _createAndroidConfigFile();
     }
-    if (buildPlatforms.contains(_defaultIOSPlatform)) {
+    if (buildPlatforms.contains(defaultIOSPlatform)) {
       await _createIOSConfigFile();
     }
   }
@@ -177,14 +177,14 @@ project.ext {
     var otherConfigs = _loadOthersConfigs();
     var parseConfig = _parseConfigs(commandEnvType, defaultConfig, otherConfigs);
 
-    if (buildPlatforms.contains(_defaultFlutterPlatform)) {
+    if (buildPlatforms.contains(defaultFlutterPlatform)) {
       _makeFlutterConfigs(commandEnvType, defaultConfig, otherConfigs);
       // _updateFlutterConfigs(commandEnvType, parseConfig, otherConfigs);
     }
-    if (buildPlatforms.contains(_defaultAndroidPlatform)) {
+    if (buildPlatforms.contains(defaultAndroidPlatform)) {
       _updateAndroidConfigs(parseConfig);
     }
-    if (buildPlatforms.contains(_defaultIOSPlatform)) {
+    if (buildPlatforms.contains(defaultIOSPlatform)) {
       _updateIOSConfigs(parseConfig);
     }
     if (replaceFiles == true) {
