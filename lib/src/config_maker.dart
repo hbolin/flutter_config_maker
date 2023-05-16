@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:collection/collection.dart';
@@ -78,10 +79,10 @@ class FlutterProject {
 
   /// 创建配置文件
   Future<void> create() async {
-    print("app配置文件所在目录的路径：$appConfigDirectory");
-    print("flutter配置文件生成的路径：$flutterConfigPath");
-    print("flutter配置生成类的名称：$flutterConfigClassName");
-    print("生成对应的平台：$buildPlatforms");
+    log("app配置文件所在目录的路径：$appConfigDirectory");
+    log("flutter配置文件生成的路径：$flutterConfigPath");
+    log("flutter配置生成类的名称：$flutterConfigClassName");
+    log("生成对应的平台：$buildPlatforms");
     // 创建app配置文件所在目录
     await _createConfigDirectory();
     if (buildPlatforms.contains(defaultFlutterPlatform)) {
@@ -98,7 +99,7 @@ class FlutterProject {
   /// 创建app配置文件所在目录
   Future<void> _createConfigDirectory() async {
     if (appDefaultConfigFile.existsSync()) {
-      print('创建app配置文件所在目录已存在，路径：${appDefaultConfigFile.path}');
+      log('创建app配置文件所在目录已存在，路径：${appDefaultConfigFile.path}');
       return;
     }
     // 创建app配置文件模板
@@ -115,13 +116,13 @@ class FlutterProject {
     }
     String description = tmplFile.readAsStringSync();
     appDefaultConfigFile.writeAsStringSync(description);
-    print('已创建app配置文件所在目录，路径：${appDefaultConfigFile.path}');
+    log('已创建app配置文件所在目录，路径：${appDefaultConfigFile.path}');
   }
 
   /// 创建flutter配置文件
   Future<void> _createFlutterConfigFile() async {
     if (flutterConfigsFile.existsSync()) {
-      print('创建flutter模板配置文件已存在，路径：${flutterConfigsFile.path}');
+      log('创建flutter模板配置文件已存在，路径：${flutterConfigsFile.path}');
       return;
     }
     flutterConfigsFile.createSync(recursive: true);
@@ -132,13 +133,13 @@ class $flutterConfigClassName {
 }
 ''';
     flutterConfigsFile.writeAsStringSync(description);
-    print('已创建flutter配置文件，路径：${flutterConfigsFile.path}');
+    log('已创建flutter配置文件，路径：${flutterConfigsFile.path}');
   }
 
   /// 创建android配置文件
   Future<void> _createAndroidConfigFile() async {
     if (android.androidPropertiesFile.existsSync()) {
-      print('创建android模板配置文件已存在，路径：${android.androidPropertiesFile.path}');
+      log('创建android模板配置文件已存在，路径：${android.androidPropertiesFile.path}');
       return;
     }
     if (!android.androidPropertiesFile.existsSync()) {
@@ -153,7 +154,7 @@ project.ext {
 }
 ''';
       android.androidPropertiesFile.writeAsStringSync(description);
-      print('已创建android模板配置文件，路径：${android.androidPropertiesFile.path}');
+      log('已创建android模板配置文件，路径：${android.androidPropertiesFile.path}');
     }
   }
 
@@ -166,12 +167,12 @@ project.ext {
 
   /// 生成文件
   Future<void> build(String? commandEnvType, bool? replaceFiles) async {
-    print("app配置文件所在目录的路径：$appConfigDirectory");
-    print("flutter配置文件生成的路径：$flutterConfigPath");
-    print("flutter配置生成类的名称：$flutterConfigClassName");
-    print("生成对应的平台：$buildPlatforms");
-    print("生成对应的环境：$commandEnvType");
-    print("是否需要替换文件：$replaceFiles");
+    log("app配置文件所在目录的路径：$appConfigDirectory");
+    log("flutter配置文件生成的路径：$flutterConfigPath");
+    log("flutter配置生成类的名称：$flutterConfigClassName");
+    log("生成对应的平台：$buildPlatforms");
+    log("生成对应的环境：$commandEnvType");
+    log("是否需要替换文件：$replaceFiles");
 
     var defaultConfig = _loadDefaultConfig();
     var otherConfigs = _loadOthersConfigs();
@@ -195,7 +196,7 @@ project.ext {
   /// 加载默认配置
   Tuple2<File, YamlParser> _loadDefaultConfig() {
     if (!appDefaultConfigFile.existsSync()) {
-      throw BuildException.NO_CREATE;
+      throw BuildException.noCreate;
     }
     YamlParser defaultYamlParser = YamlParser.createFromPath(appDefaultConfigFile.path);
     return Tuple2(appDefaultConfigFile, defaultYamlParser);
@@ -216,7 +217,7 @@ project.ext {
   YamlParser _parseConfigs(String? commandEnvType, Tuple2<File, YamlParser> defaultConfig, List<Tuple2<File, YamlParser>> otherConfigs) {
     var defaultYamlParser = YamlParser.createFromPath(defaultConfig.item1.path);
     var envActive = commandEnvType ?? defaultYamlParser.envActive;
-    print("当前激活的环境：$envActive");
+    log("当前激活的环境：$envActive");
     if (envActive != null && (envActive.trim().isNotEmpty)) {
       var activeConfig = otherConfigs.firstWhereOrNull((element) => element.item1.fileName == 'app-${envActive.trim()}.yaml');
       if (activeConfig == null) {
@@ -261,10 +262,10 @@ project.ext {
       }
     }
 
-    print("当前激活的环境配置：flutter:${defaultYamlParser.flutterConfigs.map((e) => '${e.name}:${e.value}').toList()}");
-    print("当前激活的环境配置：android:${defaultYamlParser.androidConfigs.map((e) => '${e.name}:${e.value}').toList()}");
-    print("当前激活的环境配置：ios:${defaultYamlParser.iosConfigs.map((e) => '${e.name}:${e.value}').toList()}");
-    print("当前激活的环境配置：replace_files:${defaultYamlParser.replaceFiles.map((e) => '${e.source}:${e.target}').toList()}");
+    log("当前激活的环境配置：flutter:${defaultYamlParser.flutterConfigs.map((e) => '${e.name}:${e.value}').toList()}");
+    log("当前激活的环境配置：android:${defaultYamlParser.androidConfigs.map((e) => '${e.name}:${e.value}').toList()}");
+    log("当前激活的环境配置：ios:${defaultYamlParser.iosConfigs.map((e) => '${e.name}:${e.value}').toList()}");
+    log("当前激活的环境配置：replace_files:${defaultYamlParser.replaceFiles.map((e) => '${e.source}:${e.target}').toList()}");
     return defaultYamlParser;
   }
 
@@ -280,7 +281,7 @@ project.ext {
 ${() {
       String content = parseAppYamlParser.androidConfigs.map((e) {
         return '  ${e.name} = ${() {
-          if (e.type == ProjectConfigValueType.TYPE_STRING) {
+          if (e.type == ProjectConfigValueType.typeString) {
             return "\"${e.value}\"";
           }
           return e.value;
@@ -303,69 +304,69 @@ ${() {
   /// [commandEnvType] 命令行输入的环境变量参数
   /// [parseAppYamlParser] 解析后的配置
   /// [otherConfigs] 其他的配置
-  void _updateFlutterConfigs(String? commandEnvType, YamlParser parseAppYamlParser, List<Tuple2<File, YamlParser>> otherConfigs) {
-    var envActive = commandEnvType ?? parseAppYamlParser.envActive;
-    var listEnvTypes = _envTypeList(otherConfigs);
-
-    String content = '''
-/// 该文件为自动生成，手动更改该文件，修改的内容，会被替换。
-class $flutterConfigClassName {
-${() {
-      if (envActive == null || envActive.isEmpty) {
-        return '  static const EnvType _defaultEnvActive = EnvType.none;';
-      }
-      return '  static const EnvType _defaultEnvActive = EnvType.$envActive;';
-    }()}
-
-  static EnvType? _runEnvType;
-
-  static EnvType get runEnvType {
-    if (_runEnvType != null) return _runEnvType!;
-    const value = String.fromEnvironment('env_type', defaultValue: '${envActive ?? ''}');
-    if (value.isNotEmpty) {
-${() {
-      if (listEnvTypes.isEmpty) return '';
-      return '''
-      switch (value) {
-${() {
-        return listEnvTypes.map((e) => '        case \'$e\':\n          _runEnvType = EnvType.$e;\n          break;').join('\n');
-      }()}
-      }''';
-    }()}
-    }
-    _runEnvType ??= _defaultEnvActive;
-    return _runEnvType!;
-  }
-
-${() {
-      String content = parseAppYamlParser.flutterConfigs.map((e) {
-        switch (e.type) {
-          case ProjectConfigValueType.TYPE_INT:
-            return '  static const int ${e.name} = ${e.value};';
-          case ProjectConfigValueType.TYPE_DOUBLE:
-            return '  static const double ${e.name} = ${e.value};';
-          case ProjectConfigValueType.TYPE_BOOL:
-            return '  static const bool ${e.name} = ${e.value};';
-          case ProjectConfigValueType.TYPE_STRING:
-          default:
-            return '  static const String ${e.name} = \'${e.value}\';';
-        }
-      }).join('\n');
-      return content;
-    }()}
-}
-
-enum EnvType {
-  none,${() {
-      if (listEnvTypes.isEmpty) {
-        return '';
-      }
-      return '\n' + listEnvTypes.map((e) => '  $e,').join('\n');
-    }()}
-}
-''';
-    flutterConfigsFile.writeAsStringSync(content);
-  }
+//   void _updateFlutterConfigs(String? commandEnvType, YamlParser parseAppYamlParser, List<Tuple2<File, YamlParser>> otherConfigs) {
+//     var envActive = commandEnvType ?? parseAppYamlParser.envActive;
+//     var listEnvTypes = _envTypeList(otherConfigs);
+//
+//     String content = '''
+// /// 该文件为自动生成，手动更改该文件，修改的内容，会被替换。
+// class $flutterConfigClassName {
+// ${() {
+//       if (envActive == null || envActive.isEmpty) {
+//         return '  static const EnvType _defaultEnvActive = EnvType.none;';
+//       }
+//       return '  static const EnvType _defaultEnvActive = EnvType.$envActive;';
+//     }()}
+//
+//   static EnvType? _runEnvType;
+//
+//   static EnvType get runEnvType {
+//     if (_runEnvType != null) return _runEnvType!;
+//     const value = String.fromEnvironment('env_type', defaultValue: '${envActive ?? ''}');
+//     if (value.isNotEmpty) {
+// ${() {
+//       if (listEnvTypes.isEmpty) return '';
+//       return '''
+//       switch (value) {
+// ${() {
+//         return listEnvTypes.map((e) => '        case \'$e\':\n          _runEnvType = EnvType.$e;\n          break;').join('\n');
+//       }()}
+//       }''';
+//     }()}
+//     }
+//     _runEnvType ??= _defaultEnvActive;
+//     return _runEnvType!;
+//   }
+//
+// ${() {
+//       String content = parseAppYamlParser.flutterConfigs.map((e) {
+//         switch (e.type) {
+//           case ProjectConfigValueType.TYPE_INT:
+//             return '  static const int ${e.name} = ${e.value};';
+//           case ProjectConfigValueType.TYPE_DOUBLE:
+//             return '  static const double ${e.name} = ${e.value};';
+//           case ProjectConfigValueType.TYPE_BOOL:
+//             return '  static const bool ${e.name} = ${e.value};';
+//           case ProjectConfigValueType.TYPE_STRING:
+//           default:
+//             return '  static const String ${e.name} = \'${e.value}\';';
+//         }
+//       }).join('\n');
+//       return content;
+//     }()}
+// }
+//
+// enum EnvType {
+//   none,${() {
+//       if (listEnvTypes.isEmpty) {
+//         return '';
+//       }
+//       return '\n' + listEnvTypes.map((e) => '  $e,').join('\n');
+//     }()}
+// }
+// ''';
+//     flutterConfigsFile.writeAsStringSync(content);
+//   }
 
   /// 生成Flutter配置类
   /// [commandEnvType] 命令行输入的环境变量参数
@@ -434,13 +435,13 @@ ${() {
           if (pickYamlParsers.isEmpty) {
             // 没有找到其他配置，使用的是默认的配置
             switch (e.type) {
-              case ProjectConfigValueType.TYPE_INT:
+              case ProjectConfigValueType.typeInt:
                 return '    return ${e.value};';
-              case ProjectConfigValueType.TYPE_DOUBLE:
+              case ProjectConfigValueType.typeDouble:
                 return '    return ${e.value};';
-              case ProjectConfigValueType.TYPE_BOOL:
+              case ProjectConfigValueType.typeBool:
                 return '    return ${e.value};';
-              case ProjectConfigValueType.TYPE_STRING:
+              case ProjectConfigValueType.typeString:
               default:
                 return '    return \'${e.value}\';';
             }
@@ -457,13 +458,13 @@ ${() {
               bool isDefault = defaultConfig.item2.flutterConfigs.map((e2) => e2.name).toList().contains(e.name);
               if (isDefault) {
                 switch (e.type) {
-                  case ProjectConfigValueType.TYPE_INT:
+                  case ProjectConfigValueType.typeInt:
                     return '${e.value};';
-                  case ProjectConfigValueType.TYPE_DOUBLE:
+                  case ProjectConfigValueType.typeDouble:
                     return '${e.value};';
-                  case ProjectConfigValueType.TYPE_BOOL:
+                  case ProjectConfigValueType.typeBool:
                     return '${e.value};';
-                  case ProjectConfigValueType.TYPE_STRING:
+                  case ProjectConfigValueType.typeString:
                   default:
                     return '\'${e.value}\';';
                 }
@@ -477,19 +478,19 @@ ${() {
         }();
 
         switch (e.type) {
-          case ProjectConfigValueType.TYPE_INT:
+          case ProjectConfigValueType.typeInt:
             return '''  static int get ${e.name} {
 $content
   }''';
-          case ProjectConfigValueType.TYPE_DOUBLE:
+          case ProjectConfigValueType.typeDouble:
             return '''  static double get ${e.name} {
 $content
   }''';
-          case ProjectConfigValueType.TYPE_BOOL:
+          case ProjectConfigValueType.typeBool:
             return '''  static bool get ${e.name} {
 $content
   }''';
-          case ProjectConfigValueType.TYPE_STRING:
+          case ProjectConfigValueType.typeString:
           default:
             return '''  static String get ${e.name} {
 $content
@@ -506,13 +507,13 @@ class ${e.item2} {
 ${() {
                 String content = e.item3.flutterConfigs.map((e) {
                   switch (e.type) {
-                    case ProjectConfigValueType.TYPE_INT:
+                    case ProjectConfigValueType.typeInt:
                       return '  static const int ${e.name} = ${e.value};';
-                    case ProjectConfigValueType.TYPE_DOUBLE:
+                    case ProjectConfigValueType.typeDouble:
                       return '  static const double ${e.name} = ${e.value};';
-                    case ProjectConfigValueType.TYPE_BOOL:
+                    case ProjectConfigValueType.typeBool:
                       return '  static const bool ${e.name} = ${e.value};';
-                    case ProjectConfigValueType.TYPE_STRING:
+                    case ProjectConfigValueType.typeString:
                     default:
                       return '  static const String ${e.name} = \'${e.value}\';';
                   }
@@ -541,7 +542,7 @@ ${() {
       var env = tempFile.fileNameWithoutExtension.substring(tempFile.fileNameWithoutExtension.indexOf('-') + 1);
       listEnvTypes.add(env);
     }
-    print('当前已配置如下环境：$listEnvTypes');
+    log('当前已配置如下环境：$listEnvTypes');
     return listEnvTypes;
   }
 
@@ -550,7 +551,7 @@ ${() {
     for (var element in appYamlParser.replaceFiles) {
       var sourceFile = projectDirectory.childFile(element.source);
       var targetFile = projectDirectory.childFile(element.target);
-      print('正在替换文件：sourceFile：${sourceFile.path} -> targetFile：${targetFile.path}');
+      log('正在替换文件：sourceFile：${sourceFile.path} -> targetFile：${targetFile.path}');
       if (!sourceFile.existsSync()) {
         throw BuildException('替换的文件不存在，请检查，sourceFile：${sourceFile.path}');
       }
@@ -585,7 +586,7 @@ class IosSubModule {
 }
 
 class BuildException implements Exception {
-  static final NO_CREATE = BuildException("配置文件未被创建，请先使用create进行创建");
+  static final noCreate = BuildException("配置文件未被创建，请先使用create进行创建");
 
   final String msg;
 

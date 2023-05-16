@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:args/args.dart';
@@ -14,9 +15,9 @@ Future<void> main(List<String> args) async {
   try {
     parsedArgs = commandRunner.parse(args);
   } on UsageException catch (e) {
-    print(red.wrap(e.message));
-    print('');
-    print(e.usage);
+    log(red.wrap(e.message) ?? "");
+    log('');
+    log(e.usage);
     exitCode = ExitCode.usage.code;
     return;
   }

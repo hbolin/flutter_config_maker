@@ -7,15 +7,15 @@ class ProjectConfig {
   ProjectConfig(this.name, String type, this.value)
       : type = (() {
           if (type.toLowerCase() == 'int') {
-            return ProjectConfigValueType.TYPE_INT;
+            return ProjectConfigValueType.typeInt;
           } else if (type.toLowerCase() == 'double') {
-            return ProjectConfigValueType.TYPE_DOUBLE;
+            return ProjectConfigValueType.typeDouble;
           } else if (type.toLowerCase() == 'bool') {
-            return ProjectConfigValueType.TYPE_BOOL;
+            return ProjectConfigValueType.typeBool;
           } else if (type.toLowerCase() == 'string') {
-            return ProjectConfigValueType.TYPE_STRING;
+            return ProjectConfigValueType.typeString;
           } else {
-            return ProjectConfigValueType.TYPE_STRING;
+            return ProjectConfigValueType.typeString;
           }
         }());
 
@@ -26,10 +26,10 @@ class ProjectConfig {
 }
 
 enum ProjectConfigValueType {
-  TYPE_INT,
-  TYPE_DOUBLE,
-  TYPE_BOOL,
-  TYPE_STRING,
+  typeInt,
+  typeDouble,
+  typeBool,
+  typeString,
 }
 
 /// 替换文件
