@@ -557,7 +557,7 @@ ${() {
       if (!targetFile.existsSync()) {
         targetFile.createSync(recursive: true);
       }
-      targetFile.writeAsStringSync(sourceFile.readAsStringSync());
+      targetFile.writeAsBytesSync(sourceFile.readAsBytesSync());
     }
   }
 }
