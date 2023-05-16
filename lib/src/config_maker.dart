@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:collection/collection.dart';
@@ -79,10 +78,10 @@ class FlutterProject {
 
   /// 创建配置文件
   Future<void> create() async {
-    log("app配置文件所在目录的路径：$appConfigDirectory");
-    log("flutter配置文件生成的路径：$flutterConfigPath");
-    log("flutter配置生成类的名称：$flutterConfigClassName");
-    log("生成对应的平台：$buildPlatforms");
+    print("app配置文件所在目录的路径：$appConfigDirectory");
+    print("flutter配置文件生成的路径：$flutterConfigPath");
+    print("flutter配置生成类的名称：$flutterConfigClassName");
+    print("生成对应的平台：$buildPlatforms");
     // 创建app配置文件所在目录
     await _createConfigDirectory();
     if (buildPlatforms.contains(defaultFlutterPlatform)) {
@@ -99,7 +98,7 @@ class FlutterProject {
   /// 创建app配置文件所在目录
   Future<void> _createConfigDirectory() async {
     if (appDefaultConfigFile.existsSync()) {
-      log('创建app配置文件所在目录已存在，路径：${appDefaultConfigFile.path}');
+      print('创建app配置文件所在目录已存在，路径：${appDefaultConfigFile.path}');
       return;
     }
     // 创建app配置文件模板
@@ -116,13 +115,13 @@ class FlutterProject {
     }
     String description = tmplFile.readAsStringSync();
     appDefaultConfigFile.writeAsStringSync(description);
-    log('已创建app配置文件所在目录，路径：${appDefaultConfigFile.path}');
+    print('已创建app配置文件所在目录，路径：${appDefaultConfigFile.path}');
   }
 
   /// 创建flutter配置文件
   Future<void> _createFlutterConfigFile() async {
     if (flutterConfigsFile.existsSync()) {
-      log('创建flutter模板配置文件已存在，路径：${flutterConfigsFile.path}');
+      print('创建flutter模板配置文件已存在，路径：${flutterConfigsFile.path}');
       return;
     }
     flutterConfigsFile.createSync(recursive: true);
@@ -133,13 +132,13 @@ class $flutterConfigClassName {
 }
 ''';
     flutterConfigsFile.writeAsStringSync(description);
-    log('已创建flutter配置文件，路径：${flutterConfigsFile.path}');
+    print('已创建flutter配置文件，路径：${flutterConfigsFile.path}');
   }
 
   /// 创建android配置文件
   Future<void> _createAndroidConfigFile() async {
     if (android.androidPropertiesFile.existsSync()) {
-      log('创建android模板配置文件已存在，路径：${android.androidPropertiesFile.path}');
+      print('创建android模板配置文件已存在，路径：${android.androidPropertiesFile.path}');
       return;
     }
     if (!android.androidPropertiesFile.existsSync()) {
@@ -154,7 +153,7 @@ project.ext {
 }
 ''';
       android.androidPropertiesFile.writeAsStringSync(description);
-      log('已创建android模板配置文件，路径：${android.androidPropertiesFile.path}');
+      print('已创建android模板配置文件，路径：${android.androidPropertiesFile.path}');
     }
   }
 
@@ -167,12 +166,12 @@ project.ext {
 
   /// 生成文件
   Future<void> build(String? commandEnvType, bool? replaceFiles) async {
-    log("app配置文件所在目录的路径：$appConfigDirectory");
-    log("flutter配置文件生成的路径：$flutterConfigPath");
-    log("flutter配置生成类的名称：$flutterConfigClassName");
-    log("生成对应的平台：$buildPlatforms");
-    log("生成对应的环境：$commandEnvType");
-    log("是否需要替换文件：$replaceFiles");
+    print("app配置文件所在目录的路径：$appConfigDirectory");
+    print("flutter配置文件生成的路径：$flutterConfigPath");
+    print("flutter配置生成类的名称：$flutterConfigClassName");
+    print("生成对应的平台：$buildPlatforms");
+    print("生成对应的环境：$commandEnvType");
+    print("是否需要替换文件：$replaceFiles");
 
     var defaultConfig = _loadDefaultConfig();
     var otherConfigs = _loadOthersConfigs();
@@ -217,7 +216,7 @@ project.ext {
   YamlParser _parseConfigs(String? commandEnvType, Tuple2<File, YamlParser> defaultConfig, List<Tuple2<File, YamlParser>> otherConfigs) {
     var defaultYamlParser = YamlParser.createFromPath(defaultConfig.item1.path);
     var envActive = commandEnvType ?? defaultYamlParser.envActive;
-    log("当前激活的环境：$envActive");
+    print("当前激活的环境：$envActive");
     if (envActive != null && (envActive.trim().isNotEmpty)) {
       var activeConfig = otherConfigs.firstWhereOrNull((element) => element.item1.fileName == 'app-${envActive.trim()}.yaml');
       if (activeConfig == null) {
@@ -262,10 +261,10 @@ project.ext {
       }
     }
 
-    log("当前激活的环境配置：flutter:${defaultYamlParser.flutterConfigs.map((e) => '${e.name}:${e.value}').toList()}");
-    log("当前激活的环境配置：android:${defaultYamlParser.androidConfigs.map((e) => '${e.name}:${e.value}').toList()}");
-    log("当前激活的环境配置：ios:${defaultYamlParser.iosConfigs.map((e) => '${e.name}:${e.value}').toList()}");
-    log("当前激活的环境配置：replace_files:${defaultYamlParser.replaceFiles.map((e) => '${e.source}:${e.target}').toList()}");
+    print("当前激活的环境配置：flutter:${defaultYamlParser.flutterConfigs.map((e) => '${e.name}:${e.value}').toList()}");
+    print("当前激活的环境配置：android:${defaultYamlParser.androidConfigs.map((e) => '${e.name}:${e.value}').toList()}");
+    print("当前激活的环境配置：ios:${defaultYamlParser.iosConfigs.map((e) => '${e.name}:${e.value}').toList()}");
+    print("当前激活的环境配置：replace_files:${defaultYamlParser.replaceFiles.map((e) => '${e.source}:${e.target}').toList()}");
     return defaultYamlParser;
   }
 
@@ -542,7 +541,7 @@ ${() {
       var env = tempFile.fileNameWithoutExtension.substring(tempFile.fileNameWithoutExtension.indexOf('-') + 1);
       listEnvTypes.add(env);
     }
-    log('当前已配置如下环境：$listEnvTypes');
+    print('当前已配置如下环境：$listEnvTypes');
     return listEnvTypes;
   }
 
@@ -551,7 +550,7 @@ ${() {
     for (var element in appYamlParser.replaceFiles) {
       var sourceFile = projectDirectory.childFile(element.source);
       var targetFile = projectDirectory.childFile(element.target);
-      log('正在替换文件：sourceFile：${sourceFile.path} -> targetFile：${targetFile.path}');
+      print('正在替换文件：sourceFile：${sourceFile.path} -> targetFile：${targetFile.path}');
       if (!sourceFile.existsSync()) {
         throw BuildException('替换的文件不存在，请检查，sourceFile：${sourceFile.path}');
       }
