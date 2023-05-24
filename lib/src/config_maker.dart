@@ -296,7 +296,28 @@ ${() {
   /// 更新ios配置文件
   /// [parseAppYamlParser] 解析后的配置
   void _updateIOSConfigs(YamlParser parseAppYamlParser) {
-    // TODO:更新iOS配置文件
+    List<String> writeLines = [];
+    var lines = ios.project_pbxprojFile.readAsLinesSync();
+    for (var line in lines) {
+      bool isAdd = true;
+      for (var config in parseAppYamlParser.iosConfigs) {
+        if (line.contains(config.name)) {
+          var temp = line.substring(line.indexOf("= ") + 2, line.indexOf(";"));
+          var resultLine = line.replaceAll(temp, config.value);
+          isAdd = false;
+          writeLines.add(resultLine);
+          break;
+        }
+      }
+      if (isAdd) {
+        writeLines.add(line);
+      }
+    }
+    String content = "";
+    for (var element in writeLines) {
+      content = content + element + "\n";
+    }
+    ios.project_pbxprojFile.writeAsStringSync(content);
   }
 
   /// 更新flutter配置文件
@@ -582,6 +603,16 @@ class IosSubModule {
   final FlutterProject parent;
 
   IosSubModule._(this.parent);
+
+  /// ios工程的目录
+  Directory? _iosDirectory;
+
+  Directory get iosDirectory => _iosDirectory ??= parent.projectDirectory.childDirectory('ios');
+
+  /// project.pbxproj 配置文件
+  File? _project_pbxprojFile;
+
+  File get project_pbxprojFile => _project_pbxprojFile ??= iosDirectory.childDirectory('Runner.xcodeproj').childFile('project.pbxproj');
 }
 
 class BuildException implements Exception {
