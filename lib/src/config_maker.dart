@@ -318,6 +318,29 @@ ${() {
       content = content + element + "\n";
     }
     ios.project_pbxprojFile.writeAsStringSync(content);
+
+    lines = ios.info_plist.readAsLinesSync();
+    int appNameLine = lines.indexWhere((element) => element.contains("CFBundleDisplayName"));
+    print("appNameLine：$appNameLine");
+    if (appNameLine >= 0) {
+      appNameLine += 1;
+    }
+    if (appNameLine >= 0) {
+      String oldAppName = lines[appNameLine];
+      for (var config in parseAppYamlParser.iosConfigs) {
+        if (config.name.contains("appName")) {
+          lines[appNameLine] = oldAppName.replaceAll(
+              oldAppName.substring(oldAppName.indexOf("<string>") + "<string>".length, oldAppName.indexOf("</string>")), config.value.toString());
+          print("lines[appNameLine]:"+lines[appNameLine]);
+        }
+      }
+
+      String content = "";
+      for (var element in lines) {
+        content = content + element + "\n";
+      }
+      ios.info_plist.writeAsStringSync(content);
+    }
   }
 
   /// 更新flutter配置文件
@@ -613,6 +636,11 @@ class IosSubModule {
   File? _project_pbxprojFile;
 
   File get project_pbxprojFile => _project_pbxprojFile ??= iosDirectory.childDirectory('Runner.xcodeproj').childFile('project.pbxproj');
+
+  /// Info.plist
+  File? _info_plist;
+
+  File get info_plist => _info_plist ??= iosDirectory.childDirectory('Runner').childFile('Info.plist');
 }
 
 class BuildException implements Exception {
