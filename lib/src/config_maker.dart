@@ -301,9 +301,15 @@ ${() {
     for (var line in lines) {
       bool isAdd = true;
       for (var config in parseAppYamlParser.iosConfigs) {
-        if (line.contains(config.name)) {
+        if (config.name == "versionCode" && line.contains("CURRENT_PROJECT_VERSION")) {
           var temp = line.substring(line.indexOf("= ") + 2, line.indexOf(";"));
-          var resultLine = line.replaceAll(temp, config.value);
+          var resultLine = line.replaceAll(temp, config.value.toString());
+          isAdd = false;
+          writeLines.add(resultLine);
+          break;
+        } else if (line.contains(config.name)) {
+          var temp = line.substring(line.indexOf("= ") + 2, line.indexOf(";"));
+          var resultLine = line.replaceAll(temp, config.value.toString());
           isAdd = false;
           writeLines.add(resultLine);
           break;
@@ -331,7 +337,52 @@ ${() {
         if (config.name.contains("appName")) {
           lines[appNameLine] = oldAppName.replaceAll(
               oldAppName.substring(oldAppName.indexOf("<string>") + "<string>".length, oldAppName.indexOf("</string>")), config.value.toString());
-          print("lines[appNameLine]:"+lines[appNameLine]);
+          print("lines[appNameLine]:" + lines[appNameLine]);
+        }
+      }
+
+      String content = "";
+      for (var element in lines) {
+        content = content + element + "\n";
+      }
+      ios.info_plist.writeAsStringSync(content);
+    }
+
+    int versionNameLine = lines.indexWhere((element) => element.contains("CFBundleShortVersionString"));
+    print("versionNameLine：$versionNameLine");
+    if (versionNameLine >= 0) {
+      versionNameLine += 1;
+    }
+    if (versionNameLine >= 0) {
+      String oldVersionName = lines[versionNameLine];
+      for (var config in parseAppYamlParser.iosConfigs) {
+        if (config.name.contains("versionName")) {
+          lines[versionNameLine] = oldVersionName.replaceAll(
+              oldVersionName.substring(oldVersionName.indexOf("<string>") + "<string>".length, oldVersionName.indexOf("</string>")), config.value.toString());
+          print("lines[appNameLine]:" + lines[versionNameLine]);
+        }
+      }
+
+      String content = "";
+      for (var element in lines) {
+        content = content + element + "\n";
+      }
+      ios.info_plist.writeAsStringSync(content);
+    }
+
+    int versionCodeLine = lines.indexWhere((element) => element.contains("CFBundleVersion"));
+    print("versionCodeLine：$versionCodeLine");
+    if (versionCodeLine >= 0) {
+      versionCodeLine += 1;
+    }
+    if (versionCodeLine >= 0) {
+      String versionCodeLineString = lines[versionCodeLine];
+      for (var config in parseAppYamlParser.iosConfigs) {
+        if (config.name.contains("versionCode")) {
+          lines[versionCodeLine] = versionCodeLineString.replaceAll(
+              versionCodeLineString.substring(versionCodeLineString.indexOf("<string>") + "<string>".length, versionCodeLineString.indexOf("</string>")),
+              config.value.toString());
+          print("lines[versionCodeLine]:" + lines[versionCodeLine]);
         }
       }
 
