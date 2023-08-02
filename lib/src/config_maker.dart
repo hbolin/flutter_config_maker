@@ -392,6 +392,27 @@ ${() {
       }
       ios.info_plist.writeAsStringSync(content);
     }
+
+    for (var config in parseAppYamlParser.iosConfigs) {
+      if (config.extra == "info.plist") {
+        int replaceLine = lines.indexWhere((element) => element.contains(config.name));
+        print("replaceLine：$replaceLine");
+        if (replaceLine >= 0) {
+          String replaceLineString = lines[replaceLine + 1];
+          print("replaceLineString：$replaceLineString");
+          lines[replaceLine + 1] = replaceLineString.replaceAll(
+              replaceLineString.substring(replaceLineString.indexOf("<string>") + "<string>".length, replaceLineString.indexOf("</string>")),
+              config.value.toString());
+          print("lines[replaceLine]：" + lines[replaceLine]);
+        }
+
+        String content = "";
+        for (var element in lines) {
+          content = content + element + "\n";
+        }
+        ios.info_plist.writeAsStringSync(content);
+      }
+    }
   }
 
   /// 更新flutter配置文件

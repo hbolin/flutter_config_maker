@@ -92,7 +92,7 @@ class YamlParser {
       } else {
         // 强制设置值类型
         final Map<dynamic, dynamic> valueMap = value;
-        configs.add(ProjectConfig(key, valueMap['type'].toString(), valueMap['value'].toString()));
+        configs.add(ProjectConfig(key, valueMap['type'].toString(), valueMap['value'].toString(), extra: valueMap['extra']));
       }
     });
     return configs;

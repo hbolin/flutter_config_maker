@@ -3,8 +3,9 @@ class ProjectConfig {
   String name;
   ProjectConfigValueType type;
   dynamic value;
+  String? extra;
 
-  ProjectConfig(this.name, String type, this.value)
+  ProjectConfig(this.name, String type, this.value, {this.extra})
       : type = (() {
           if (type.toLowerCase() == 'int') {
             return ProjectConfigValueType.typeInt;
